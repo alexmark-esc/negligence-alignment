@@ -1,5 +1,3 @@
-# negligence-alignment
-
 # Negligent AI: Reasonable Care for AI Safety — Data Repository
 
 Data and scoring materials for "Negligent AI: Reasonable Care for AI Safety" (Mark, 2026).
