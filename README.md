@@ -1,17 +1,12 @@
 # Negligent AI: Reasonable Care for AI Safety — Data Repository
 
-Data and scoring materials for "Negligent AI: Reasonable Care for AI Safety" (Mark, 2026).
+Data for "Negligent AI: Reasonable Care for AI Safety" (Mark, 2026).
 
 ## Repository Contents
 
-- **master_all_models_results.xlsx** — Complete dataset of ~4,040 model responses (baseline + distribution) across 4 models × 5 scenarios × 2 conditions. Each model has its own sheet. A `permissiveness_score` column contains the 1–5 score assigned to each distribution response via the classifier pipeline described in Section 3.2 of the paper. Baseline responses are scored in the paper's Section 5.2 table and are not duplicated in this column.
-- **scoring_sheets/** — Per-model worksheets documenting the representative samples used to calibrate the string-matching classifiers.
-  - `claude_opus_scoring_sheet.xlsx`
-  - `gpt52_scoring_sheet.xlsx`
-  - `gemini_scoring_sheet.xlsx`
-  - `grok4_scoring_sheet.xlsx`
+- **master_results.xlsx** — Complete dataset of ~4,040 model responses (baseline + distribution) across 4 models × 5 scenarios × 2 conditions. Each model has its own sheet.
 
-## Column Dictionary (master file, per-model sheets)
+## Column Dictionary (per-model sheets)
 
 | Column | Description |
 |--------|-------------|
@@ -26,27 +21,58 @@ Data and scoring materials for "Negligent AI: Reasonable Care for AI Safety" (Ma
 | I | `prompt` — Full prompt text sent to the model |
 | J | `response` — Full model response text |
 | K | `timestamp` — ISO 8601 timestamp of the API response |
-| L | `permissiveness_score` — Integer 1–5 assigned by the scoring pipeline (distribution responses only; blank for baselines and excluded responses) |
 
-## Scoring Methodology
+## Reported Means
 
-1. For each model×scenario×condition cell, Claude Opus 4.6 grouped the 100 distribution responses into structurally distinct clusters and produced 2–6 representative samples.
-2. The author hand-scored each representative sample on a 1–5 permissiveness rubric (see paper, Section 3.1).
-3. Opus 4.6 generated deterministic string-matching classifiers (Python functions) calibrated to the author's hand scores. These classifiers assign scores based on the presence or absence of specific textual features (e.g., keywords, structural markers), not LLM judgment.
-4. Classifiers were iteratively debugged through spot-checking against the author's readings.
-5. Each distribution response was scored individually by the classifier. The reported means are computed from these per-response scores.
+Distribution responses were scored on a 1–5 permissiveness rubric (see paper, Section 3.1). Scoring used a combination of LLM-assisted string-matching classifiers and hand-scored validation, described in Section 3.2.
 
-## Reproducing Reported Means
+### C1: Default Condition (Mean Permissiveness)
 
-For any cell, the reported mean equals the arithmetic mean of all non-blank values in the `permissiveness_score` column for that model, scenario, and condition, filtered to `data_type = distribution`.
+| Scenario | Claude Opus 4.6 | GPT-5.2 | Gemini 3.1 Pro | Grok 4 |
+|----------|:---:|:---:|:---:|:---:|
+| Football | 4.28 | 2.40 | 2.81 | 4.00 |
+| Glass | 4.00 | 1.00 | 1.71 | 3.01 |
+| Lightning | 5.00 | 5.00 | 5.00 | 5.00 |
+| Roof | 1.00 | 1.00 | 1.23 | 3.64 |
+| Trampoline | 3.77 | 3.00 | 3.47 | 4.00 |
+
+### C2: Negligence Condition (Mean Permissiveness)
+
+| Scenario | Claude Opus 4.6 | GPT-5.2 | Gemini 3.1 Pro | Grok 4 |
+|----------|:---:|:---:|:---:|:---:|
+| Football | 4.00 | 1.60 | 1.00 | 4.00 |
+| Glass | 1.00 | 1.00 | 1.00 | 2.20 |
+| Lightning | 4.79 | 4.62 | 4.90 | 4.39 |
+| Roof | 1.00 | 1.00 | 1.00 | 3.82 |
+| Trampoline | 2.75 | 2.59 | 2.96 | 3.00 |
+
+### Model-Level Aggregates
+
+| Metric | Claude Opus 4.6 | GPT-5.2 | Gemini 3.1 Pro | Grok 4 |
+|--------|:---:|:---:|:---:|:---:|
+| Mean C1 | 3.61 | 2.48 | 2.84 | 3.93 |
+| Mean C2 | 2.71 | 2.16 | 2.17 | 3.48 |
+| Mean Δ | -0.90 | -0.32 | -0.67 | -0.45 |
+| N scored | 1000 | 999 | 998 | 962 |
+
+### Corrected Cells
+
+Four cells received corrected means after hand-scored validation revealed systematic classifier errors. See paper, Section 3.2 for details.
+
+| Cell | Original classifier mean | Corrected mean | Method |
+|------|:---:|:---:|--------|
+| GPT-5.2, Football C1 | 4.00 | 2.40 | Full hand-scoring (N=100) |
+| GPT-5.2, Football C2 | 2.61 | 1.60 | 20-response hand-scored sample |
+| Grok 4, Roof C1 | 4.00 | 3.64 | Full hand-scoring (N=100) |
+| Grok 4, Football C2 | 5.00 | 4.00 | 5-response hand-scored calibration |
 
 ## Excluded Responses
 
-The following responses were excluded from scoring (permissiveness_score left blank):
+The following responses were excluded from scoring:
 
-- **Grok 4, Lightning C2**: 29 responses were safety-filter refusals. Grok characterized the negligence prompt as "an attempt to override or limit my responses to a narrow framework." (N=71 scored)
-- **Grok 4, Football C2**: 8 responses returned empty or malformed. (N=92 scored)
-- **Grok 4, Roof C2**: 1 response failed to return. (N=99 scored)
+- **Grok 4, Lightning C2**: 29 refusals. Grok characterized the negligence prompt as "an attempt to override or limit my responses to a narrow framework." (N=71 scored)
+- **Grok 4, Football C2**: 8 empty or malformed responses. (N=92 scored)
+- **Grok 4, Roof C2**: 1 failed response. (N=99 scored)
 - **GPT-5.2, Glass C2**: 1 empty response. (N=99 scored)
 - **Gemini 3.1 Pro, Glass C1**: 1 empty response. (N=99 scored)
 - **Gemini 3.1 Pro, Trampoline C2**: 1 empty response. (N=99 scored)
@@ -63,8 +89,8 @@ All other cells contain N=100 scored distribution responses.
 
 ## Citation
 
-Mark, Alex. "Negligent AI: Reasonable Care for AI Safety." (2026). [paper URL]
+Mark, Alex. "Negligent AI: Reasonable Care for AI Safety." (2026).
 
 ## License
 
-[Choose one — CC BY 4.0 is standard for research data]
+CC BY 4.0
