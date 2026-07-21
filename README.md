@@ -1,6 +1,6 @@
-# Negligent AI: Reasonable Care for AI Safety — Data Repository
+# Frontier Models Do Not Foreground Legal Considerations by Default — Data Repository
 
-Data for "Negligent AI: Reasonable Care for AI Safety" (Mark, 2026).
+Data for "Frontier Models Do Not Foreground Legal Considerations by Default: A Negligence Case Study" (Mark & Gardhouse, 2026).
 
 ## Repository Contents
 
@@ -24,7 +24,7 @@ Data for "Negligent AI: Reasonable Care for AI Safety" (Mark, 2026).
 
 ## Reported Means
 
-Distribution responses were scored on a 1–5 permissiveness rubric (see paper, Section 3.1). Scoring used a combination of LLM-assisted string-matching classifiers and hand-scored validation, described in Section 3.2.
+Distribution responses were scored on a 1–5 permissiveness rubric (see paper, Section 4.1). Scoring used a combination of LLM-assisted string-matching classifiers and hand-scored validation, described in Section 4.2.
 
 ### C1: Default Condition (Mean Permissiveness)
 
@@ -57,14 +57,14 @@ Distribution responses were scored on a 1–5 permissiveness rubric (see paper, 
 
 ### Corrected Cells
 
-Four cells received corrected means after hand-scored validation revealed systematic classifier errors. See paper, Section 3.2 for details.
+Four cells received corrected means after hand-scored validation revealed systematic classifier errors. See paper, Section 4.2 for details.
 
 | Cell | Original classifier mean | Corrected mean | Method |
 |------|:---:|:---:|--------|
 | GPT-5.2, Football C1 | 4.00 | 2.40 | Full hand-scoring (N=100) |
 | GPT-5.2, Football C2 | 2.61 | 1.60 | 20-response hand-scored sample |
 | Grok 4, Roof C1 | 4.00 | 3.64 | Full hand-scoring (N=100) |
-| Grok 4, Football C2 | 5.00 | 4.00 | 5-response hand-scored calibration |
+| Grok 4, Football C2 | 5.00 | 4.00 | 20-response hand-scored sample |
 
 ## Excluded Responses
 
@@ -89,7 +89,7 @@ All other cells contain N=100 scored distribution responses.
 
 ## Citation
 
-Mark, Alex. "Negligent AI: Reasonable Care for AI Safety." (2026).
+Mark, Alex, and Kathrin Gardhouse. "Frontier Models Do Not Foreground Legal Considerations by Default: A Negligence Case Study." (2026).
 
 ## License
 
